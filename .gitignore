@@ -93,3 +93,6 @@ db.sqlite3
 # Custom
 notes.md
 notes.txt
+/.venv
+pyproject.toml
+pyproject.toml
