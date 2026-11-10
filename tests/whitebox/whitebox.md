@@ -1,9 +1,12 @@
 # Testy białoskrzynkowe - realworld-django-ninja
 
 ## 1. Pokrycie kodu
+
 Dla utworzonych wcześniej testów sprawdzone zostało pokrycie kodu, przy użyciu narzędzia coverage.py.
+
 Pomijając pliki testowe i migracyjne aplikacji, uzyskano:
 
+```text
 Name                        Stmts   Miss Branch BrPart  Cover   Missing
 -----------------------------------------------------------------------
 apps/accounts/__init__.py       0      0      0      0   100%
@@ -29,14 +32,16 @@ helpers/exceptions.py          23      4      4      2    78%   26, 29-31
 helpers/jwt_utils.py           76     12     18      6    81%   56, 59-60, 65->68, 72-73, 80, 87-88, 90, 95-96, 106
 -----------------------------------------------------------------------
 TOTAL                         606     52     86     23    88%
+```
 
-Jak widać powyzej 52 linie kodu nie zostały pokryte. Natomiast jeżeli skupimy się wyłącznie na endpointach
-w apps/accounts/api.py, apps/articles/api.py i apps/comments/api.py, to w tych trzech plikach niepokrytych jest 14 instrukcji.
+Jak widać powyzej 52 linie kodu nie zostały pokryte. Natomiast jeżeli skupimy się wyłącznie na endpointach w apps/accounts/api.py, apps/articles/api.py i apps/comments/api.py, to w tych trzech plikach niepokrytych jest 14 instrukcji.
 
-## 1.1 Galęzie
+### 1.1 Galęzie
 
-Scenariusze testowe i warianty działania
+#### Scenariusze testowe i warianty działania
+
 Tabela przedstawia dwa warianty zachowania dla poszczególnych funkcji API i przypisane do nich przypadki testowe.
+
 Warianty opisują sytuacje sprawdzane przez testy, ale nie zawsze odpowiadają odrębnym gałęziom instrukcji warunkowych w kodzie Pythona.
 
 | Funkcja / warunek | Wariant A – testy | Wariant B – testy | Interpretacja |
@@ -70,8 +75,12 @@ Warianty opisują sytuacje sprawdzane przez testy, ale nie zawsze odpowiadają o
 | Usunięcie komentarza: osoba całkowicie postronna | Brak implementacji TC-31e | — | Scenariusz opisany w `blackbox.md`, ale nieobecny w `blackbox.py`; trzeba go dodać, aby sprawdzić ścieżkę 403 dla osoby niebędącej autorem komentarza ani artykułu |
 | Tagi: użyty tag występuje / brak duplikatów | TC-32a | TC-32b | Dwa warianty danych dla tej samej funkcji pobierania tagów; niekoniecznie osobne gałęzie Pythona |
 
+#### Częściowo pokryte decyzje
+
 W 23 miejscach testy wykonały warunek, ale nie przeszły przez wszystkie możliwe ścieżki.
+
 Zapis A ↛ B oznacza niewykonane przejście z linii A do B. Najczęstsze luki dotyczą walidacji danych, nietypowych operacji na relacjach, autoryzacji i obsługi tokenów.
+
 | Plik | Brakujące przejście | Niepokryty wariant / funkcja | Przykład dodatkowego scenariusza |
 |---|---|---|---|
 | `accounts/api.py` | `76 ↛ 77` | `put_user`: zapis nowego hasła | Aktualizacja `PUT /user` z poprawnym nowym hasłem |
@@ -98,8 +107,10 @@ Zapis A ↛ B oznacza niewykonane przejście z linii A do B. Najczęstsze luki d
 | `helpers/jwt_utils.py` | `89 ↛ 90` | Sesja istnieje, ale wygasła | Ustawienie przeszłej daty ważności sesji |
 | `helpers/jwt_utils.py` | `105 ↛ 106` | `create_jwt_token` z przekazanym obiektem `request` | Bezpośrednie wywołanie pomocnika z `request` |
 
-Konteksty coverage.py pozwalają wskazać, które testy wykonały linię zawierającą dany warunek. Nie oznacza to, że te testy wykonały również brakujące przejście;
-tabela ułatwia wybór przypadków, które warto rozszerzyć.
+#### Konteksty testów dla linii decyzji
+
+Konteksty coverage.py pozwalają wskazać, które testy wykonały linię zawierającą dany warunek. Nie oznacza to, że te testy wykonały również brakujące przejście; tabela ułatwia wybór przypadków, które warto rozszerzyć.
+
 | Linia decyzji | Przejście niewykonane | Liczba testów na warunku | Testy z przypisaną linią decyzji |
 |---|---|---:|---|
 | `apps/accounts/api.py:76` | `76 ↛ 77` | **3** | TC-13, TC-13b, TC-14 |
@@ -126,9 +137,12 @@ tabela ułatwia wybór przypadków, które warto rozszerzyć.
 | `helpers/jwt_utils.py:89` | `89 ↛ 90` | **53** | TC-10b, TC-11, TC-13, TC-13b, TC-14 i 48 pozostałych |
 | `helpers/jwt_utils.py:105` | `105 ↛ 106` | **62** | TC-01, TC-02, TC-06a, TC-06b, TC-07 i 57 pozostałych |
 
+#### Decyzje niewykonane przez testy
 
 Osiem niewykonanych przejść pochodzi z czterech warunków, do których testy w ogóle nie dotarły.
+
 Dotyczą one tworzenia superużytkownika, walidacji długości nowego hasła oraz obsługi wyjątku przy tworzeniu artykułu.
+
 | Plik i linia decyzji | Brakujące przejścia | Dlaczego decyzja nie była oceniona? |
 |---|---:|---|
 | `apps/accounts/models.py:22` | 2 | Warunek `is_staff` w nieuruchomionym `create_superuser()` |
@@ -137,10 +151,9 @@ Dotyczą one tworzenia superużytkownika, walidacji długości nowego hasła ora
 | `apps/articles/api.py:84` | 2 | Decyzja `if field == "slug"` znajduje się wewnątrz niewykonanego `except IntegrityError` podczas tworzenia artykułu |
 | **Łącznie** | **8** |
 
+### 1.2 Testy wykonujące te same fragmenty kodu
 
-## 1.2 Testy wykonujące te same fragmenty kodu
-Testy obejmują większość typowych ścieżek realizowanych przez endpointy, ale w gałęziach obsługi tokenów,
-aktualizacji wybranych pól, duplikatów relacji oraz szczególnych warunków autoryzacji pozostały luki.
+Testy obejmują większość typowych ścieżek realizowanych przez endpointy, ale w gałęziach obsługi tokenów, aktualizacji wybranych pól, duplikatów relacji oraz szczególnych warunków autoryzacji pozostały luki.
 
 | Liczba wspólnych instrukcji na test | Liczba testów w grupie | Testy o identycznym pokryciu |
 |---:|---:|---|
@@ -160,7 +173,7 @@ aktualizacji wybranych pól, duplikatów relacji oraz szczególnych warunków au
 
 Zauważalne są m.in. pary TC-28a/TC-28b (po 69 instrukcji), TC-06a/TC-06b (po 27) oraz grupa TC-26b/TC-26e/TC-26f/TC-26g/TC-26h (po 69). Grupy z niewielką liczbą instrukcji (np. warianty błędnego e-maila) oznaczają przede wszystkim wspólną ścieżkę walidacji, a nie redundantność asercji.
 
-## 1.3 Nieosiągalne fragmenty kodu
+### 1.3 Nieosiągalne fragmenty kodu
 
 Ponizej znajdują się fragmenty kodu nieosiągalne przez prawidłowe wywołania publicznego API RealWorld, zgodne ze specyfikacją:
 
@@ -173,21 +186,20 @@ Ponizej znajdują się fragmenty kodu nieosiągalne przez prawidłowe wywołania
 | `apps/accounts/models.py` | 54 | `User.is_following()` | Endpointy sprawdzają relacje obserwowania bez wywoływania tej metody. |
 | `apps/articles/models.py` | 18 | `Tag.__str__()` | Publiczne API zwraca nazwy tagów bez korzystania z tej metody. |
 | `apps/articles/models.py` | 59 | `Article.as_markdown()` | Publiczne API zwraca treść artykułów w JSON i nie wywołuje tej metody. |
+
 Łącznie: 14 niepokrytych instrukcji należących do fragmentów nieosiągalnych przez prawidłowe operacje publicznego API.
 
 ## 2 Zmiany w badanych funkcjach
 
-## Przebieg bazowy
+### Przebieg bazowy
 
 Przed wprowadzeniem zmiany uruchomiono pełny zestaw 86 testów na oryginalnej implementacji aplikacji. Uzyskane wyniki przyjęto jako punkt odniesienia do późniejszych eksperymentów.
 
 Wynik przebiegu bazowego:
 
-Liczba wykonanych testów: 86
-
-Testy zaliczone: 80
-
-Testy niezaliczone: 6
+- Liczba wykonanych testów: 86
+- Testy zaliczone: 80
+- Testy niezaliczone: 6
 
 Po każdej zmainie ponownie uruchamiano pełny zestaw testów. Za wykrycie zmiany uznawano nowe niepowodzenie testu, który przechodził w przebiegu bazowym.
 
@@ -206,209 +218,227 @@ Przeprowadzono 10 zmian, po jednej dla kazdej z funkcjonalnosci F1 - F10. Ponize
 | Z09 | F9 – Komentarze | Do zapisywanego komentarza dodajemy niezamierzony znak `!` | TC-29a, TC-30a |
 | Z10 | F10 – Tagi | Endpoint zawsze zwraca pustą listę tagów | TC-32a, TC-32b |
 
-## 2.1 Dokładne zmiany
+### 2.1 Dokładne zmiany
 
-### Z01 - Rejestracja
+#### Z01 - Rejestracja
 
-**# PRZED**
+**PRZED**
+
 ```python
 "username": user.username,
 ```
 
-**# PO**
+**PO**
+
 ```python
 "username": user.email,
 ```
 
-### Z02 - Logowanie
+#### Z02 - Logowanie
 
-**# PRZED**
+**PRZED**
+
 ```python
 "token": create_jwt_token(jwt_token),
 ```
 
-**# PO**
+**PO**
+
 ```python
 "token": "invalid-token",
 ```
 
-### Z03 - Bieżący użytkownik
+#### Z03 - Bieżący użytkownik
 
-**# PRZED**
+**PRZED**
+
 ```python
 request.user.save()
 ```
 
-**# PO**
+**PO**
+
 ```python
 request.user.save(update_fields=["username"])
 ```
 
-### Z04 - Profile i obserwowanie
+#### Z04 - Profile i obserwowanie
 
-**# PRZED**
+**PRZED**
+
 ```python
 profile.followers.add(request.user)
 ```
 
-**# PO**
+**PO**
+
 ```python
 profile.followers.remove(request.user)
 ```
 
-### Z05 - Artykuły (CRUD)
+#### Z05 - Artykuły (CRUD)
 
-**# PRZED**
+**PRZED**
+
 ```python
 article.save(update_fields=updated_fields)
 ```
 
-**# PO**
+**PO**
+
 ```python
 article.save(update_fields=["updated"])
 ```
 
-### Z06 - Lista artykułów
+#### Z06 - Lista artykułów
 
-**# PRZED**
+**PRZED**
+
 ```python
 queryset = queryset.order_by("-created")
 ```
 
-**# PO**
+**PO**
+
 ```python
 queryset = queryset.order_by("created")
 ```
 
-### Z07 - Feed
+#### Z07 - Feed
 
-**# PRZED**
+**PRZED**
+
 ```python
 .filter(author__in=followed_authors)
 ```
 
-**# PO**
+**PO**
+
 ```python
 .exclude(author__in=followed_authors)
 ```
 
-### Z08 - Ulubione
+#### Z08 - Ulubione
 
-**# PRZED**
+**PRZED**
+
 ```python
 article.favorites.add(request.user)
 ```
 
-**# PO**
+**PO**
+
 ```python
 article.favorites.remove(request.user)
 ```
 
-### Z09 - Komentarze
+#### Z09 - Komentarze
 
-**# PRZED**
+**PRZED**
+
 ```python
 content=data.comment.body,
 ```
 
-**# PO**
+**PO**
+
 ```python
 content=data.comment.body + "!",
 ```
 
-### Z10 - Tagi
+#### Z10 - Tagi
 
-**# PRZED**
+**PRZED**
+
 ```python
 return {"tags": [t.name for t in Tag.objects.all()]}
 ```
 
-**# PO**
+**PO**
+
 ```python
 return {"tags": []}
 ```
 
-## 2.2 Właściwe zmiany w funkcjach
+### 2.2 Właściwe zmiany w funkcjach
 
-## ZO1
+#### ZO1
 
-## FAILED tests/blackbox/blackbox.py::TestRegistration::test_tc01_valid_registration
+- `FAILED tests/blackbox/blackbox.py::TestRegistration::test_tc01_valid_registration`
+
 W eksperymencie Z01 zmieniono wartość pola username zwracanego podczas rejestracji na adres e-mail użytkownika.
+
 Po ponownym wykonaniu pełnego zestawu testów test TC-01 wykrył nieprawidłową wartość pola.
 
+#### Z02
 
-## Z02
+- `FAILED tests/blackbox/blackbox.py::TestLogin::test_tc10b_token_from_login_is_usable`
 
-## FAILED tests/blackbox/blackbox.py::TestLogin::test_tc10b_token_from_login_is_usable
+W eksperymencie Z02 prawidłowo generowany token JWT zastąpiono stałą wartością invalid-token. Po uruchomieniu zestawu testów TC-10b wykrył problem, próbując użyć otrzymanego tokenu do pobrania danych bieżącego użytkownika.
 
-W eksperymencie Z02 prawidłowo generowany token JWT zastąpiono stałą wartością invalid-token. Po uruchomieniu zestawu testów TC-10b wykrył problem,
-próbując użyć otrzymanego tokenu do pobrania danych bieżącego użytkownika.
+#### Z03
 
-## Z03
+- `FAILED tests/blackbox/blackbox.py::TestCurrentUser::test_tc13_update_bio_and_image`
+- `FAILED tests/blackbox/blackbox.py::TestCurrentUser::test_tc13b_partial_update_keeps_other_fields`
 
-## FAILED tests/blackbox/blackbox.py::TestCurrentUser::test_tc13_update_bio_and_image
-## FAILED tests/blackbox/blackbox.py::TestCurrentUser::test_tc13b_partial_update_keeps_other_fields
+W eksperymencie Z03 zmieniono zapis użytkownika tak, aby aktualizowane było tylko pole username, bez utrwalania zmian bio i image. Po ponownym wykonaniu testów TC-13 i TC-13b wykryły nieprawidłowe działanie aktualizacji profilu, w tym problem z zachowaniem danych przy częściowej aktualizacji.
 
-W eksperymencie Z03 zmieniono zapis użytkownika tak, aby aktualizowane było tylko pole username, bez utrwalania zmian bio i image. Po ponownym wykonaniu testów TC-13 i TC-13b wykryły nieprawidłowe działanie aktualizacji profilu,
-w tym problem z zachowaniem danych przy częściowej aktualizacji.
+#### Z04
 
-## Z04
+- `FAILED tests/blackbox/blackbox.py::TestProfiles::test_tc18a_follow_and_unfollow`
+- `FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27c_only_followed_authors`
 
-## FAILED tests/blackbox/blackbox.py::TestProfiles::test_tc18a_follow_and_unfollow
-## FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27c_only_followed_authors
+W eksperymencie Z04 operację dodawania relacji obserwowania zastąpiono jej usuwaniem. Test TC-18a wykrył nieprawidłowy stan obserwowania profilu, a TC-27c wykrył jego wpływ na zawartość feedu, który powinien prezentować artykuły obserwowanych autorów.
 
-W eksperymencie Z04 operację dodawania relacji obserwowania zastąpiono jej usuwaniem. Test TC-18a wykrył nieprawidłowy
-stan obserwowania profilu, a TC-27c wykrył jego wpływ na zawartość feedu, który powinien prezentować artykuły obserwowanych autorów.
-
-## Z05
+#### Z05
 
 W eksperymencie Z05 ograniczono zapis aktualizowanego artykułu do pola updated, pomijając utrwalenie zmodyfikowanych pól treści i opisu. Zgłoszony przebieg testów nie wykrył tej zmiany. Test TC-24a sprawdza wartości zwracane bezpośrednio po aktualizacji, ale nie pobiera artykułu ponownie z bazy danych.
+
 Aby wykrywać taki błąd, należałoby rozszerzyć go o ponowny odczyt GET i porównanie zapisanych wartości.
 
-## Z06
+#### Z06
 
-## FAILED tests/blackbox/blackbox.py::TestArticleList::test_tc26h_newest_first
+- `FAILED tests/blackbox/blackbox.py::TestArticleList::test_tc26h_newest_first`
 
-W eksperymencie Z06 odwrócono sortowanie listy artykułów z malejącego na rosnące według daty utworzenia. Po ponownym uruchomieniu testów TC-26h wykrył,
-że artykuły nie są zwracane w oczekiwanej kolejności od najnowszego do najstarszego.
+W eksperymencie Z06 odwrócono sortowanie listy artykułów z malejącego na rosnące według daty utworzenia. Po ponownym uruchomieniu testów TC-26h wykrył, że artykuły nie są zwracane w oczekiwanej kolejności od najnowszego do najstarszego.
 
-## Z07
+#### Z07
 
-## FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27b_empty_when_following_nobody
-## FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27c_only_followed_authors
-## FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27d_unfollow_removes_from_feed
+- `FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27b_empty_when_following_nobody`
+- `FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27c_only_followed_authors`
+- `FAILED tests/blackbox/blackbox.py::TestFeed::test_tc27d_unfollow_removes_from_feed`
 
-W eksperymencie Z07 filtrowanie artykułów obserwowanych autorów zastąpiono wybieraniem artykułów autorów nieobserwowanych. Zmianę wykryły TC-27b, TC-27c i TC-27d. Testy ujawniły błędną zawartość feedu
-w przypadku braku obserwowanych użytkowników, aktywnej relacji obserwowania oraz zakończenia obserwowania autora.
+W eksperymencie Z07 filtrowanie artykułów obserwowanych autorów zastąpiono wybieraniem artykułów autorów nieobserwowanych. Zmianę wykryły TC-27b, TC-27c i TC-27d. Testy ujawniły błędną zawartość feedu w przypadku braku obserwowanych użytkowników, aktywnej relacji obserwowania oraz zakończenia obserwowania autora.
 
-## Z08
+#### Z08
 
-## FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28a_favorite - asser...
-## FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28b_counter_counts_distinct_users
-## FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28c_unfavorite - ass...
-## FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28d_favorited_flag_is_per_viewer
+- `FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28a_favorite - asser...`
+- `FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28b_counter_counts_distinct_users`
+- `FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28c_unfavorite - ass...`
+- `FAILED tests/blackbox/blackbox.py::TestFavorites::test_tc28d_favorited_flag_is_per_viewer`
 
-W eksperymencie Z08 zamiast dodawać użytkownika do listy polubień artykułu, usuwano istniejącą relację. Po ponownym wykonaniu testów TC-28a, TC-28b, TC-28c i TC-28d zakończyły się niepowodzeniem. Wyniki wskazują na wykrycie problemów z operacją polubienia, licznikiem favoritesCount oraz flagą favorited. Dokładna
-przyczyna niepowodzenia TC-28c, który sprawdza cofnięcie polubienia, wymaga weryfikacji szczegółowego komunikatu asercji.
+W eksperymencie Z08 zamiast dodawać użytkownika do listy polubień artykułu, usuwano istniejącą relację. Po ponownym wykonaniu testów TC-28a, TC-28b, TC-28c i TC-28d zakończyły się niepowodzeniem. Wyniki wskazują na wykrycie problemów z operacją polubienia, licznikiem favoritesCount oraz flagą favorited. Dokładna przyczyna niepowodzenia TC-28c, który sprawdza cofnięcie polubienia, wymaga weryfikacji szczegółowego komunikatu asercji.
 
-## Z09
+#### Z09
 
-## FAILED tests/blackbox/blackbox.py::TestComments::test_tc29a_add_comment - Ass...
-## FAILED tests/blackbox/blackbox.py::TestComments::test_tc30a_list_comments_public
+- `FAILED tests/blackbox/blackbox.py::TestComments::test_tc29a_add_comment - Ass...`
+- `FAILED tests/blackbox/blackbox.py::TestComments::test_tc30a_list_comments_public`
 
-W eksperymencie Z09 do treści zapisywanego komentarza dodano niezamierzony znak !. Test TC-29a wykrył zmianę
-treści zwróconej po utworzeniu komentarza, a TC-30a wykrył niezgodność treści komentarzy podczas pobierania ich listy.
+W eksperymencie Z09 do treści zapisywanego komentarza dodano niezamierzony znak !. Test TC-29a wykrył zmianę treści zwróconej po utworzeniu komentarza, a TC-30a wykrył niezgodność treści komentarzy podczas pobierania ich listy.
 
-## Z10
+#### Z10
 
-## FAILED tests/blackbox/blackbox.py::TestTags::test_tc32a_tags_contains_used_tag
-## FAILED tests/blackbox/blackbox.py::TestTags::test_tc32b_tags_unique - Asserti...
+- `FAILED tests/blackbox/blackbox.py::TestTags::test_tc32a_tags_contains_used_tag`
+- `FAILED tests/blackbox/blackbox.py::TestTags::test_tc32b_tags_unique - Asserti...`
 
-W eksperymencie Z10 zmieniono endpoint tagów tak, aby niezależnie od zapisanych danych zwracał pustą listę. Test TC-32a wykrył brak tagu
-użytego w artykule, a TC-32b wykrył, że tag dodany do dwóch artykułów nie występuje na liście dokładnie jeden raz.
+W eksperymencie Z10 zmieniono endpoint tagów tak, aby niezależnie od zapisanych danych zwracał pustą listę. Test TC-32a wykrył brak tagu użytego w artykule, a TC-32b wykrył, że tag dodany do dwóch artykułów nie występuje na liście dokładnie jeden raz.
 
-## 2.3 Podsumowanie eksperymentów
+### 2.3 Podsumowanie eksperymentów
+
 Przeprowadzono 10 eksperymentów polegających na wprowadzeniu niewielkich zmian do badanych funkcji aplikacji.
+
 W przypadku 9 zmian (Z01–Z04 oraz Z06–Z10) testy zakończyły się dodatkowymi niepowodzeniami, co wskazuje na skuteczne wykrycie wprowadzonych błędów.
+
 Jedna zmiana (Z05) nie została wykryta. Polegała ona na pominięciu zapisu zmodyfikowanych danych artykułu do bazy. Test TC-24a sprawdzał odpowiedź na żądanie aktualizacji, ale nie weryfikował trwałości zmian poprzez ponowne pobranie artykułu.
+
 Eksperymenty pokazują, że zestaw testów skutecznie wykrywa większość wprowadzonych zmian, jednak samo pokrycie instrukcji nie gwarantuje wykrycia wszystkich błędów. Istotne jest również sprawdzanie stanu aplikacji po wykonaniu operacji.
