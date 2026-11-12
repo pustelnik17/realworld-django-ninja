@@ -4,7 +4,7 @@ Repozytorium systemu: https://github.com/c4ffein/realworld-django-ninja
 
 ## 1. Zakres i założenia
 
-Badany system to backend blogowy (klon platformy Medium) w Django Ninja, zgodny ze specyfikacją RealWorld API. Ponieważ testy mają być czarnoskrzynkowe, „funkcją" jest tu*endpoint API: wejściem jest żądanie HTTP, a wyjściem kod odpowiedzi i JSON. Oczekiwane wyniki wynikają ze specyfikacji RealWorld oraz z ogólnych zasad HTTP/REST.
+Badany system to backend blogowy (klon platformy Medium) w Django Ninja, zgodny ze specyfikacją RealWorld API. W ramach zadania przygotowano testy czarnoskrzynkowe, a ze względu na charakterystykę systemu, jako badane funkcje przyjeto endpointy API, gdzie wejściem jest żądanie HTTP, a wyjściem kod odpowiedzi i JSON. Oczekiwane wyniki wynikają ze specyfikacji RealWorld oraz z ogólnych zasad HTTP/REST.
 
 **Wybrane funkcje systemu do testów:**
 
