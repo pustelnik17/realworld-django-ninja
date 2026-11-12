@@ -1,10 +1,10 @@
-# Testy czarnoskrzynkowe – realworld-django-ninja
+# Testy czarnoskrzynkowe - realworld-django-ninja
 
-Repozytorium: https://github.com/c4ffein/realworld-django-ninja
+Repozytorium systemu: https://github.com/c4ffein/realworld-django-ninja
 
 ## 1. Zakres i założenia
 
-Badany system to backend blogowy (klon platformy Medium) w Django Ninja, zgodny ze specyfikacją **RealWorld API**. Ponieważ testy mają być czarnoskrzynkowe, „funkcją" jest tu **endpoint API**: wejściem jest żądanie HTTP, a wyjściem kod odpowiedzi i JSON. Oczekiwane wyniki wynikają ze specyfikacji RealWorld oraz z ogólnych zasad HTTP/REST.
+Badany system to backend blogowy (klon platformy Medium) w Django Ninja, zgodny ze specyfikacją RealWorld API. Ponieważ testy mają być czarnoskrzynkowe, „funkcją" jest tu*endpoint API: wejściem jest żądanie HTTP, a wyjściem kod odpowiedzi i JSON. Oczekiwane wyniki wynikają ze specyfikacji RealWorld oraz z ogólnych zasad HTTP/REST.
 
 **Wybrane funkcje systemu do testów:**
 
@@ -46,7 +46,7 @@ Macierz uprawnień:
 
 | Skrót | Znaczenie |
 |-------|-----------|
-| U, U2, S | zarejestrowani użytkownicy z własnymi, ważnymi tokenami (S – użytkownik postronny, bez związku z danym artykułem) |
+| U, U2, S | zarejestrowani użytkownicy z własnymi, ważnymi tokenami (S - użytkownik postronny, bez związku z danym artykułem) |
 | A | artykuł utworzony przez U |
 | C | komentarz do artykułu A |
 | `{slug A}` | `slug` zwrócony przy tworzeniu artykułu A |
@@ -54,9 +54,9 @@ Macierz uprawnień:
 Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe tworzone są w ramach testu z losowymi nazwami.
 
 
-### F1. Rejestracja – `POST /api/users`
+### F1. Rejestracja - `POST /api/users`
 
-#### TC-01 – Rejestracja z poprawnymi danymi
+#### TC-01 - Rejestracja z poprawnymi danymi
 
 **Przypadek testowy TC-01**  
 **Opis:** sprawdzenie, czy system tworzy konto i zwraca dane użytkownika wraz z tokenem
@@ -70,7 +70,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** w systemie istnieje nowe konto, a zwrócony token identyfikuje to konto
 
-#### TC-02 – Hasło nie jest ujawniane w odpowiedzi
+#### TC-02 - Hasło nie jest ujawniane w odpowiedzi
 
 **Przypadek testowy TC-02**  
 **Opis:** sprawdzenie poufności hasła po rejestracji
@@ -84,7 +84,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** konto istnieje, a odpowiedź nie zawiera danych poufnych
 
-#### TC-03 – Rejestracja z brakującym polem wymaganym (×3)
+#### TC-03 - Rejestracja z brakującym polem wymaganym (×3)
 
 **Przypadek testowy TC-03**  
 **Opis:** sprawdzenie walidacji obecności pól `username`, `email`, `password`
@@ -99,7 +99,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żadne konto nie zostało utworzone
 
-#### TC-04 – Rejestracja z pustym polem (×3)
+#### TC-04 - Rejestracja z pustym polem (×3)
 
 **Przypadek testowy TC-04**  
 **Opis:** sprawdzenie odrzucania pustych napisów
@@ -114,7 +114,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żadne konto nie zostało utworzone
 
-#### TC-05 – Rejestracja z niepoprawnym formatem e-maila (×5)
+#### TC-05 - Rejestracja z niepoprawnym formatem e-maila (×5)
 
 **Przypadek testowy TC-05**  
 **Opis:** sprawdzenie walidacji formatu adresu e-mail (klasy niepoprawne)
@@ -131,7 +131,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żadne konto nie zostało utworzone
 
-#### TC-06a – Rejestracja z zajętym adresem e-mail
+#### TC-06a - Rejestracja z zajętym adresem e-mail
 
 **Przypadek testowy TC-06a**  
 **Opis:** sprawdzenie, czy system odrzuca duplikat e-maila
@@ -144,7 +144,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** nie powstało drugie konto z tym e-mailem
 
-#### TC-06b – Rejestracja z zajętym username
+#### TC-06b - Rejestracja z zajętym username
 
 **Przypadek testowy TC-06b**  
 **Opis:** sprawdzenie, czy system odrzuca duplikat nazwy użytkownika
@@ -157,7 +157,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** nie powstało drugie konto z tym username
 
-#### TC-06c – Rejestracja z niepoprawną strukturą JSON
+#### TC-06c - Rejestracja z niepoprawną strukturą JSON
 
 **Przypadek testowy TC-06c**  
 **Opis:** sprawdzenie reakcji na brak obwiedni `user`
@@ -171,9 +171,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** żadne konto nie zostało utworzone
 
 
-### F2. Logowanie – `POST /api/users/login`
+### F2. Logowanie - `POST /api/users/login`
 
-#### TC-07 – Logowanie poprawnymi danymi
+#### TC-07 - Logowanie poprawnymi danymi
 
 **Przypadek testowy TC-07**  
 **Opis:** sprawdzenie, czy system uwierzytelnia użytkownika i wydaje token
@@ -187,7 +187,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** użytkownik otrzymał token uwierzytelniający
 
-#### TC-08 – Logowanie ze złym hasłem
+#### TC-08 - Logowanie ze złym hasłem
 
 **Przypadek testowy TC-08**  
 **Opis:** sprawdzenie, czy system odrzuca błędne hasło
@@ -201,7 +201,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** token nie został wydany
 
-#### TC-09 – Logowanie nieistniejącym e-mailem
+#### TC-09 - Logowanie nieistniejącym e-mailem
 
 **Przypadek testowy TC-09**  
 **Opis:** sprawdzenie reakcji na nieznane konto
@@ -215,7 +215,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** token nie został wydany
 
-#### TC-10 – Logowanie bez hasła
+#### TC-10 - Logowanie bez hasła
 
 **Przypadek testowy TC-10**  
 **Opis:** sprawdzenie obsługi niekompletnych danych logowania
@@ -228,7 +228,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** token nie został wydany
 
-#### TC-10b – Token z logowania umożliwia dostęp do zasobów chronionych
+#### TC-10b - Token z logowania umożliwia dostęp do zasobów chronionych
 
 **Przypadek testowy TC-10b**  
 **Opis:** sprawdzenie spójności logowania i autoryzacji
@@ -243,9 +243,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** token z logowania jest akceptowany przez system
 
 
-### F3. Bieżący użytkownik – `GET/PUT /api/user`
+### F3. Bieżący użytkownik - `GET/PUT /api/user`
 
-#### TC-11 – Pobranie danych zalogowanego użytkownika
+#### TC-11 - Pobranie danych zalogowanego użytkownika
 
 **Przypadek testowy TC-11**  
 **Opis:** sprawdzenie, czy system zwraca dane właściciela tokenu
@@ -258,7 +258,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane użytkownika nie zostały zmienione
 
-#### TC-12a – Dostęp do `GET /user` bez tokenu
+#### TC-12a - Dostęp do `GET /user` bez tokenu
 
 **Przypadek testowy TC-12a**  
 **Opis:** sprawdzenie ochrony zasobu przed anonimem
@@ -271,7 +271,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały ujawnione
 
-#### TC-12b – Dostęp do `GET /user` z niepoprawnym tokenem (×3)
+#### TC-12b - Dostęp do `GET /user` z niepoprawnym tokenem (×3)
 
 **Przypadek testowy TC-12b**  
 **Opis:** sprawdzenie odporności systemu na błędne tokeny (klasy: losowy napis, napis podobny do JWT, pusty)
@@ -286,7 +286,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały ujawnione; serwer nie zgłasza błędu wewnętrznego
 
-#### TC-13 – Aktualizacja `bio` i `image`
+#### TC-13 - Aktualizacja `bio` i `image`
 
 **Przypadek testowy TC-13**  
 **Opis:** sprawdzenie, czy zmiana profilu jest zwrócona i zapamiętana
@@ -300,7 +300,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** profil U zawiera nowe `bio` i `image`
 
-#### TC-13b – Aktualizacja częściowa nie zeruje pozostałych pól
+#### TC-13b - Aktualizacja częściowa nie zeruje pozostałych pól
 
 **Przypadek testowy TC-13b**  
 **Opis:** sprawdzenie, czy pominięte pola zachowują wartości
@@ -314,7 +314,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** pola, których nie podano w ostatnim żądaniu, zachowały wartości
 
-#### TC-14 – Zmiana e-maila na zajęty przez innego użytkownika
+#### TC-14 - Zmiana e-maila na zajęty przez innego użytkownika
 
 **Przypadek testowy TC-14**  
 **Opis:** sprawdzenie ochrony unikalności e-maila przy aktualizacji
@@ -327,7 +327,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** e-mail użytkownika U pozostaje niezmieniony
 
-#### TC-15 – Aktualizacja profilu bez tokenu
+#### TC-15 - Aktualizacja profilu bez tokenu
 
 **Przypadek testowy TC-15**  
 **Opis:** sprawdzenie ochrony `PUT /user` przed anonimem
@@ -341,9 +341,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** żadne dane nie zostały zmienione
 
 
-### F4. Profile – `GET /api/profiles/{username}`, `POST/DELETE …/follow`
+### F4. Profile - `GET /api/profiles/{username}`, `POST/DELETE …/follow`
 
-#### TC-16 – Pobranie profilu istniejącego użytkownika
+#### TC-16 - Pobranie profilu istniejącego użytkownika
 
 **Przypadek testowy TC-16**  
 **Opis:** sprawdzenie zawartości publicznego profilu
@@ -357,7 +357,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane profilu nie zostały zmienione
 
-#### TC-17 – Pobranie profilu nieistniejącego użytkownika
+#### TC-17 - Pobranie profilu nieistniejącego użytkownika
 
 **Przypadek testowy TC-17**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -370,7 +370,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian w systemie
 
-#### TC-18a – Obserwowanie i przestanie obserwowania użytkownika
+#### TC-18a - Obserwowanie i przestanie obserwowania użytkownika
 
 **Przypadek testowy TC-18a**  
 **Opis:** sprawdzenie pełnego cyklu follow → unfollow
@@ -385,7 +385,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** U nie obserwuje U2
 
-#### TC-18b – Obserwowanie bez tokenu
+#### TC-18b - Obserwowanie bez tokenu
 
 **Przypadek testowy TC-18b**  
 **Opis:** sprawdzenie ochrony operacji follow
@@ -398,7 +398,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** relacja obserwowania nie powstała
 
-#### TC-18c – Obserwowanie nieistniejącego użytkownika
+#### TC-18c - Obserwowanie nieistniejącego użytkownika
 
 **Przypadek testowy TC-18c**  
 **Opis:** sprawdzenie reakcji na nieznany profil
@@ -412,9 +412,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** relacja obserwowania nie powstała
 
 
-### F5. Artykuły – CRUD
+### F5. Artykuły - CRUD
 
-#### TC-19 – Utworzenie artykułu z poprawnymi danymi
+#### TC-19 - Utworzenie artykułu z poprawnymi danymi
 
 **Przypadek testowy TC-19**  
 **Opis:** sprawdzenie tworzenia artykułu i pól zwracanych
@@ -429,7 +429,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** w systemie istnieje artykuł autorstwa U
 
-#### TC-19b – Utworzenie artykułu bez tagów
+#### TC-19b - Utworzenie artykułu bez tagów
 
 **Przypadek testowy TC-19b**  
 **Opis:** sprawdzenie wartości domyślnej `tagList`
@@ -442,7 +442,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł istnieje i ma pustą listę tagów
 
-#### TC-20 – Utworzenie artykułu z brakującym polem (×3)
+#### TC-20 - Utworzenie artykułu z brakującym polem (×3)
 
 **Przypadek testowy TC-20**  
 **Opis:** sprawdzenie walidacji pól wymaganych
@@ -457,7 +457,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żaden artykuł nie został utworzony
 
-#### TC-21 – Utworzenie artykułu bez tokenu
+#### TC-21 - Utworzenie artykułu bez tokenu
 
 **Przypadek testowy TC-21**  
 **Opis:** sprawdzenie ochrony tworzenia artykułów
@@ -470,7 +470,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żaden artykuł nie został utworzony
 
-#### TC-22a – Odczyt artykułu po `slug`
+#### TC-22a - Odczyt artykułu po `slug`
 
 **Przypadek testowy TC-22a**  
 **Opis:** sprawdzenie publicznego odczytu artykułu
@@ -483,7 +483,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł nie został zmieniony
 
-#### TC-22b – Odczyt artykułu o nieznanym `slug`
+#### TC-22b - Odczyt artykułu o nieznanym `slug`
 
 **Przypadek testowy TC-22b**  
 **Opis:** sprawdzenie reakcji na nieistniejący zasób
@@ -496,7 +496,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian w systemie
 
-#### TC-23 – Dwa artykuły o tym samym tytule
+#### TC-23 - Dwa artykuły o tym samym tytule
 
 **Przypadek testowy TC-23**  
 **Opis:** sprawdzenie zachowania przy kolizji tytułów (specyfikacja nie rozstrzyga)
@@ -511,7 +511,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** żadne dwa artykuły nie dzielą tego samego `slug`
 
-#### TC-24a – Edycja artykułu przez autora
+#### TC-24a - Edycja artykułu przez autora
 
 **Przypadek testowy TC-24a**  
 **Opis:** sprawdzenie aktualizacji pól artykułu
@@ -525,7 +525,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A ma zmienione `body` i `description`
 
-#### TC-24b – Edycja artykułu przez innego użytkownika
+#### TC-24b - Edycja artykułu przez innego użytkownika
 
 **Przypadek testowy TC-24b**  
 **Opis:** sprawdzenie reguł uprawnień (nie-autor)
@@ -539,7 +539,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A pozostał niezmieniony
 
-#### TC-24c – Edycja artykułu bez tokenu
+#### TC-24c - Edycja artykułu bez tokenu
 
 **Przypadek testowy TC-24c**  
 **Opis:** sprawdzenie ochrony edycji przed anonimem
@@ -552,7 +552,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A pozostał niezmieniony
 
-#### TC-24d – Edycja nieistniejącego artykułu
+#### TC-24d - Edycja nieistniejącego artykułu
 
 **Przypadek testowy TC-24d**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -565,7 +565,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian w systemie
 
-#### TC-25a – Usunięcie artykułu przez autora
+#### TC-25a - Usunięcie artykułu przez autora
 
 **Przypadek testowy TC-25a**  
 **Opis:** sprawdzenie usuwania i jego skutku
@@ -579,7 +579,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A nie istnieje
 
-#### TC-25b – Usunięcie artykułu przez innego użytkownika
+#### TC-25b - Usunięcie artykułu przez innego użytkownika
 
 **Przypadek testowy TC-25b**  
 **Opis:** sprawdzenie reguł uprawnień przy usuwaniu
@@ -593,7 +593,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A nadal istnieje
 
-#### TC-25c – Usunięcie artykułu bez tokenu
+#### TC-25c - Usunięcie artykułu bez tokenu
 
 **Przypadek testowy TC-25c**  
 **Opis:** sprawdzenie ochrony usuwania przed anonimem
@@ -606,7 +606,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** artykuł A nadal istnieje
 
-#### TC-25d – Usunięcie nieistniejącego artykułu
+#### TC-25d - Usunięcie nieistniejącego artykułu
 
 **Przypadek testowy TC-25d**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -620,9 +620,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** brak zmian w systemie
 
 
-### F6. Lista artykułów – `GET /api/articles`
+### F6. Lista artykułów - `GET /api/articles`
 
-#### TC-26a – Struktura odpowiedzi listy
+#### TC-26a - Struktura odpowiedzi listy
 
 **Przypadek testowy TC-26a**  
 **Opis:** sprawdzenie formatu odpowiedzi
@@ -636,7 +636,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26b – Filtrowanie po autorze
+#### TC-26b - Filtrowanie po autorze
 
 **Przypadek testowy TC-26b**  
 **Opis:** sprawdzenie filtra `author`
@@ -650,7 +650,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26c – Filtrowanie po nieistniejącym autorze
+#### TC-26c - Filtrowanie po nieistniejącym autorze
 
 **Przypadek testowy TC-26c**  
 **Opis:** sprawdzenie pustego wyniku filtra
@@ -663,7 +663,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26d – Filtrowanie po tagu
+#### TC-26d - Filtrowanie po tagu
 
 **Przypadek testowy TC-26d**  
 **Opis:** sprawdzenie filtra `tag`
@@ -677,7 +677,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26e – Ograniczenie liczby wyników (`limit`)
+#### TC-26e - Ograniczenie liczby wyników (`limit`)
 
 **Przypadek testowy TC-26e**  
 **Opis:** wartość brzegowa: `limit` mniejszy od liczby wyników
@@ -690,7 +690,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26f – Przesunięcie wyników (`offset`)
+#### TC-26f - Przesunięcie wyników (`offset`)
 
 **Przypadek testowy TC-26f**  
 **Opis:** sprawdzenie paginacji
@@ -704,7 +704,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26g – `offset` większy od liczby wyników
+#### TC-26g - `offset` większy od liczby wyników
 
 **Przypadek testowy TC-26g**  
 **Opis:** wartość brzegowa: przesunięcie poza zakres
@@ -717,7 +717,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26h – Kolejność: najnowsze najpierw
+#### TC-26h - Kolejność: najnowsze najpierw
 
 **Przypadek testowy TC-26h**  
 **Opis:** sprawdzenie sortowania
@@ -731,7 +731,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-26i – Filtrowanie po ulubionych (`favorited`)
+#### TC-26i - Filtrowanie po ulubionych (`favorited`)
 
 **Przypadek testowy TC-26i**  
 **Opis:** sprawdzenie filtra `favorited`
@@ -745,7 +745,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** tylko jeden artykuł jest polubiony przez U
 
-#### TC-26j – Pola elementu listy
+#### TC-26j - Pola elementu listy
 
 **Przypadek testowy TC-26j**  
 **Opis:** sprawdzenie kompletności pól w elemencie listy
@@ -760,9 +760,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** dane nie zostały zmienione
 
 
-### F7. Feed – `GET /api/articles/feed`
+### F7. Feed - `GET /api/articles/feed`
 
-#### TC-27a – Feed bez tokenu
+#### TC-27a - Feed bez tokenu
 
 **Przypadek testowy TC-27a**  
 **Opis:** sprawdzenie ochrony feedu
@@ -775,7 +775,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian
 
-#### TC-27b – Feed użytkownika, który nikogo nie obserwuje
+#### TC-27b - Feed użytkownika, który nikogo nie obserwuje
 
 **Przypadek testowy TC-27b**  
 **Opis:** sprawdzenie pustego feedu
@@ -788,7 +788,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian
 
-#### TC-27c – Feed zawiera tylko artykuły obserwowanych autorów
+#### TC-27c - Feed zawiera tylko artykuły obserwowanych autorów
 
 **Przypadek testowy TC-27c**  
 **Opis:** sprawdzenie zależności feedu od relacji follow
@@ -803,7 +803,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** U obserwuje wyłącznie U2
 
-#### TC-27d – Przestanie obserwowania usuwa artykuły z feedu
+#### TC-27d - Przestanie obserwowania usuwa artykuły z feedu
 
 **Przypadek testowy TC-27d**  
 **Opis:** sprawdzenie reakcji feedu na unfollow
@@ -819,9 +819,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** U nikogo nie obserwuje
 
 
-### F8. Ulubione – `POST/DELETE /api/articles/{slug}/favorite`
+### F8. Ulubione - `POST/DELETE /api/articles/{slug}/favorite`
 
-#### TC-28a – Polubienie artykułu
+#### TC-28a - Polubienie artykułu
 
 **Przypadek testowy TC-28a**  
 **Opis:** sprawdzenie flagi i licznika po polubieniu
@@ -835,7 +835,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** A jest polubiony przez U2
 
-#### TC-28b – Licznik zlicza różnych użytkowników
+#### TC-28b - Licznik zlicza różnych użytkowników
 
 **Przypadek testowy TC-28b**  
 **Opis:** sprawdzenie sumowania polubień
@@ -849,7 +849,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** A jest polubiony przez U i U2
 
-#### TC-28c – Cofnięcie polubienia
+#### TC-28c - Cofnięcie polubienia
 
 **Przypadek testowy TC-28c**  
 **Opis:** sprawdzenie flagi i licznika po `DELETE`
@@ -863,7 +863,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** A nie jest polubiony przez nikogo
 
-#### TC-28d – Flaga `favorited` zależy od oglądającego
+#### TC-28d - Flaga `favorited` zależy od oglądającego
 
 **Przypadek testowy TC-28d**  
 **Opis:** sprawdzenie widoku per użytkownik
@@ -877,7 +877,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-28e – Polubienie bez tokenu
+#### TC-28e - Polubienie bez tokenu
 
 **Przypadek testowy TC-28e**  
 **Opis:** sprawdzenie ochrony operacji
@@ -890,7 +890,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** licznik polubień bez zmian
 
-#### TC-28f – Polubienie nieistniejącego artykułu
+#### TC-28f - Polubienie nieistniejącego artykułu
 
 **Przypadek testowy TC-28f**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -904,9 +904,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** brak zmian
 
 
-### F9. Komentarze – `/api/articles/{slug}/comments`
+### F9. Komentarze - `/api/articles/{slug}/comments`
 
-#### TC-29a – Dodanie komentarza
+#### TC-29a - Dodanie komentarza
 
 **Przypadek testowy TC-29a**  
 **Opis:** sprawdzenie tworzenia komentarza i pól zwracanych
@@ -920,7 +920,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** A ma jeden komentarz autorstwa U2
 
-#### TC-29b – Dodanie komentarza bez `body`
+#### TC-29b - Dodanie komentarza bez `body`
 
 **Przypadek testowy TC-29b**  
 **Opis:** sprawdzenie walidacji obecności pola
@@ -933,7 +933,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz nie został dodany
 
-#### TC-29c – Dodanie komentarza z pustym `body`
+#### TC-29c - Dodanie komentarza z pustym `body`
 
 **Przypadek testowy TC-29c**  
 **Opis:** wartość brzegowa: pusty napis
@@ -946,7 +946,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz nie został dodany
 
-#### TC-29d – Dodanie komentarza bez tokenu
+#### TC-29d - Dodanie komentarza bez tokenu
 
 **Przypadek testowy TC-29d**  
 **Opis:** sprawdzenie ochrony operacji
@@ -959,7 +959,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz nie został dodany
 
-#### TC-29e – Dodanie komentarza do nieistniejącego artykułu
+#### TC-29e - Dodanie komentarza do nieistniejącego artykułu
 
 **Przypadek testowy TC-29e**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -972,7 +972,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian
 
-#### TC-30a – Publiczna lista komentarzy
+#### TC-30a - Publiczna lista komentarzy
 
 **Przypadek testowy TC-30a**  
 **Opis:** sprawdzenie odczytu komentarzy przez anonima
@@ -985,7 +985,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-30b – Pusta lista komentarzy
+#### TC-30b - Pusta lista komentarzy
 
 **Przypadek testowy TC-30b**  
 **Opis:** sprawdzenie artykułu bez komentarzy
@@ -998,7 +998,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-30c – Lista komentarzy nieistniejącego artykułu
+#### TC-30c - Lista komentarzy nieistniejącego artykułu
 
 **Przypadek testowy TC-30c**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -1011,7 +1011,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian
 
-#### TC-31a – Usunięcie komentarza przez jego autora
+#### TC-31a - Usunięcie komentarza przez jego autora
 
 **Przypadek testowy TC-31a**  
 **Opis:** sprawdzenie usuwania i jego skutku
@@ -1025,10 +1025,10 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz C nie istnieje
 
-#### TC-31b – Usunięcie komentarza przez autora artykułu (nie autora komentarza)
+#### TC-31b - Usunięcie komentarza przez autora artykułu (nie autora komentarza)
 
 **Przypadek testowy TC-31b**  
-**Opis:** sprawdzenie reguł uprawnień przy usuwaniu komentarza; w teście usuwającym jest U – autor artykułu, a komentarz napisał U2
+**Opis:** sprawdzenie reguł uprawnień przy usuwaniu komentarza; w teście usuwającym jest U - autor artykułu, a komentarz napisał U2
 
 **Warunki wstępne:** serwer API jest uruchomiony; istnieje zarejestrowany użytkownik U z ważnym tokenem; istnieje drugi zarejestrowany użytkownik U2 z własnym tokenem; istnieje artykuł A utworzony przez U (z tagiem `bbtag`) z komentarzem C autorstwa U2
 
@@ -1039,7 +1039,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz C nadal istnieje (przy założeniu, że autor artykułu nie moderuje komentarzy)
 
-#### TC-31c – Usunięcie komentarza bez tokenu
+#### TC-31c - Usunięcie komentarza bez tokenu
 
 **Przypadek testowy TC-31c**  
 **Opis:** sprawdzenie ochrony operacji
@@ -1052,7 +1052,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** komentarz C nadal istnieje
 
-#### TC-31d – Usunięcie nieistniejącego komentarza
+#### TC-31d - Usunięcie nieistniejącego komentarza
 
 **Przypadek testowy TC-31d**  
 **Opis:** sprawdzenie reakcji na nieznany zasób
@@ -1065,7 +1065,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** brak zmian
 
-#### TC-31e – Usunięcie komentarza przez użytkownika niezwiązanego z artykułem i komentarzem
+#### TC-31e - Usunięcie komentarza przez użytkownika niezwiązanego z artykułem i komentarzem
 
 **Przypadek testowy TC-31e**  
 **Opis:** jednoznaczny test autoryzacji: usuwający nie jest ani autorem komentarza, ani autorem artykułu
@@ -1080,9 +1080,9 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 **Warunki wyjściowe:** komentarz C nadal istnieje
 
 
-### F10. Tagi – `GET /api/tags`
+### F10. Tagi - `GET /api/tags`
 
-#### TC-32a – Tag użyty w artykule występuje na liście tagów
+#### TC-32a - Tag użyty w artykule występuje na liście tagów
 
 **Przypadek testowy TC-32a**  
 **Opis:** sprawdzenie agregacji tagów
@@ -1096,7 +1096,7 @@ Wszystkie przypadki wymagają, by serwer API był uruchomiony; dane testowe twor
 
 **Warunki wyjściowe:** dane nie zostały zmienione
 
-#### TC-32b – Tagi na liście są unikalne
+#### TC-32b - Tagi na liście są unikalne
 
 **Przypadek testowy TC-32b**  
 **Opis:** sprawdzenie braku duplikatów
@@ -1136,11 +1136,11 @@ Każdy test tworzy własnych użytkowników i dane z losowymi nazwami, więc tes
 
 ### 4.2 Analiza
 
-**TC-06a, TC-06b – kod 409 zamiast 422.** Aplikacja poprawnie odrzuca duplikat, ale zwraca 409 Conflict. Specyfikacja RealWorld wymaga 422 dla błędów walidacji, więc jest to drobne odstępstwo od kontraktu API, które może zepsuć klientów oczekujących 422. Sam kod 409 jest uzasadniony semantycznie w REST. Można albo zgłosić to jako niezgodność ze specyfikacją, albo rozszerzyć asercję do `(409, 422)` (tak jak zrobiono dla logowania).
+**TC-06a, TC-06b - kod 409 zamiast 422.** Aplikacja poprawnie odrzuca duplikat, ale zwraca 409 Conflict. Specyfikacja RealWorld wymaga 422 dla błędów walidacji, więc jest to drobne odstępstwo od kontraktu API, które może zepsuć klientów oczekujących 422. Sam kod 409 jest uzasadniony semantycznie w REST.
 
-**TC-12b – 500 dla zniekształconego tokenu (`abc`, `x.y.z`).** Aplikacja zwraca błąd serwera zamiast 401. Pusty token (trzeci przypadek parametryzacji) został obsłużony poprawnie, więc problem dotyczy niepustych, ale niepoprawnych tokenów. To realny defekt: dane od klienta nie powinny powodować błędu 500, a w praktyce każdy może go wywołać jednym żądaniem.
+**TC-12b - 500 dla zniekształconego tokenu.** Aplikacja zwraca błąd serwera zamiast 401. Pusty token (trzeci przypadek parametryzacji) został obsłużony poprawnie, więc problem dotyczy niepustych, ale niepoprawnych tokenów. Dane od klienta nie powinny powodować błędu 500, a w praktyce każdy może go wywołać jednym żądaniem.
 
-**TC-14 – 500 przy zmianie e-maila na zajęty.** Aplikacja nie odrzuca takiej zmiany kontrolowanym błędem walidacji, tylko kończy się błędem serwera. Przy rejestracji ten sam rodzaj kolizji jest obsłużony poprawnie (409), więc ścieżka aktualizacji profilu jest niespójna z rejestracją. To defekt. Z perspektywy czarnej skrzynki znamy tylko objaw. Nie wiemy, czy dane zostały zmienione, więc warto sprawdzić stan konta po takim żądaniu.
+**TC-14 - 500 przy zmianie e-maila na zajęty.** Aplikacja nie odrzuca takiej zmiany kontrolowanym błędem walidacji, tylko kończy się błędem serwera. Przy rejestracji ten sam rodzaj kolizji jest obsłużony poprawnie (409), więc ścieżka aktualizacji profilu jest niespójna z rejestracją.
 
 ### 4.3 Podsumowanie
 
